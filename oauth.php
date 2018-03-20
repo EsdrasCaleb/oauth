@@ -100,7 +100,20 @@ class OAuth {
 			$url_base = '';
 		}
 
-		$options = array( $client_id, $client_secret, $allowed_domains, $autologin_active, $url_base );
+		if ( isset( $input['img_field'] ) ) {
+			$img_field = trim( $input['img_field'] );
+			if ( get_option( 'oauth_img_field' ) === FALSE ) {
+				add_option( 'oauth_img_field', $img_field );
+			}
+			else {
+				update_option( 'oauth_img_field', $img_field );
+			}
+		}
+		else {
+			$img_field = '';
+		}
+
+		$options = array( $client_id, $client_secret, $allowed_domains, $autologin_active, $url_base,$img_field );
 		return $options;
 	} //end check_option
 
@@ -334,9 +347,12 @@ class OAuth {
 	public function oauth_login_form() {
 		$clientId =  get_option( 'oauth_client_id' );
 		$autologinActive =  get_option( 'oauth_autologin_active' );
-		$linkOauth =  get_option( 'oauth_url_base' );
 		$imgOauth =  get_option( 'oauth_img_field' );
 		$redirectUrl = admin_url( 'admin-ajax.php?action=oauth-callback' );
+		$linkOauth =  get_option( 'oauth_url_base' )."/oauth/authorize/?response_type=code".
+  			"&client_id="     . $clientId .
+  			"&redirect_uri="  . $redirectUrl;
+
 		echo '<div style="padding:10px;border:1px solid #ced9ea;border-radius:3px;-webkit-border-radius:3px;-moz-border-radius:3px;"><a href="'. $linkOauth .'"><img height="20px" alt="image of oatu server" src="'.$imgOauth.'" /> <strong>Login Via sabia</strong></div>';
 		if ( isset( $_GET['oauth-error'] ) ) {
 			echo '<div style="padding:10px;background-color:#FFDFDD;border:1px solid #ced9ea;border-radius:3px;-webkit-border-radius:3px;-moz-border-radius:3px;"><p style="line-height:1.6em;"><strong>Error!</strong> Error connecting. </p></div><br>';

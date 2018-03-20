@@ -1,6 +1,6 @@
 === Plugin Name ===
 Contributors: EsdrasCaleb
-Tags: security, login, oauth2, oauth, google, google apps, authentication, autologin
+Tags: security, login, oauth2, oauth,authentication, autologin
 Requires at least: 3.0.1
 Tested up to: 4.9
 Stable tag: 1.0
