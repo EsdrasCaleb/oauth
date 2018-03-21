@@ -218,7 +218,7 @@ class OAuth {
 		$client_secret =  get_option( 'oauth_client_secret' );
 		$url_base =  get_option( 'oauth_url_base' );
 		$redirect_url = admin_url() . 'admin-ajax.php?action=oauth-callback';
-
+		var_dump($code);
 		if ( isset( $code ) ) {
 			if ( true ) {
 				//make oauth call
@@ -238,7 +238,8 @@ class OAuth {
 				else {
 					wp_redirect( wp_login_url() . "?oauth-error=1" );
 				}
-
+				var_dump($oauth_response);
+				die('');
 				if ( isset( $oauth_response['access_token'] ) ) {
 					$urlSessao = str_replace('https://login', 'https://api', $url_base);
 					//vars
@@ -342,7 +343,7 @@ class OAuth {
 	 *
 	 * @access public
 	 * @return void,
-	 *TODO Botao login sabia
+	 *
 	 */
 	public function oauth_login_form() {
 		$clientId =  get_option( 'oauth_client_id' );
@@ -352,8 +353,10 @@ class OAuth {
 		$linkOauth =  get_option( 'oauth_url_base' )."/oauth/authorize/?response_type=code".
   			"&client_id="     . $clientId .
   			"&redirect_uri="  . $redirectUrl;
-
-		echo '<div style="padding:10px;border:1px solid #ced9ea;border-radius:3px;-webkit-border-radius:3px;-moz-border-radius:3px;"><a href="'. $linkOauth .'"><img height="20px" alt="image of oatu server" src="'.$imgOauth.'" /> <strong>Login Via sabia</strong></div>';
+  		if(!$oauthServerName){
+  			$oauthServerName = "sabia";
+  		}
+		echo '<div style="padding:10px;border:1px solid #ced9ea;border-radius:3px;-webkit-border-radius:3px;-moz-border-radius:3px;"><a href="'. $linkOauth .'"><img height="20px" alt="image of oatu server" src="'.$imgOauth.'" /> <strong>Login Via '.$oauthServerName.'</strong></div>';
 		if ( isset( $_GET['oauth-error'] ) ) {
 			echo '<div style="padding:10px;background-color:#FFDFDD;border:1px solid #ced9ea;border-radius:3px;-webkit-border-radius:3px;-moz-border-radius:3px;"><p style="line-height:1.6em;"><strong>Error!</strong> Error connecting. </p></div><br>';
 		}
